@@ -1,1 +1,3 @@
-console.log("ApplyWise frontend loaded");
+function login() {
+  window.location.href = "dashboard.html";
+}
