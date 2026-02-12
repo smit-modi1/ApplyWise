@@ -3,7 +3,7 @@ import { RoleMatcherService } from './role-matcher.service';
 import { ResumeTailorService } from './resume-tailor.service';
 import { CoverLetterService } from './cover-letter.service';
 import { suggestRolesSchema, tailorResumeSchema, coverLetterSchema } from './ai.types';
-import { AppError } from '../../middleware/errorHandler';
+
 
 const roleMatcherService = new RoleMatcherService();
 const resumeTailorService = new ResumeTailorService();

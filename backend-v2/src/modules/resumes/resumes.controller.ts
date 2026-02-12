@@ -53,7 +53,7 @@ export class ResumesController {
     async getResume(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = (req as any).user?.userId;
-            const { id } = req.params;
+            const id = req.params.id as string;
             const resume = await resumesService.getResume(userId, id);
 
             res.status(200).json({
@@ -70,7 +70,7 @@ export class ResumesController {
     async deleteResume(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = (req as any).user?.userId;
-            const { id } = req.params;
+            const id = req.params.id as string;
             await resumesService.deleteResume(userId, id);
 
             res.status(204).send();
