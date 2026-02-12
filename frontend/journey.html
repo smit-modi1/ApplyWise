@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get Started – ApplyWise</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="journey-body">
+  <!-- Progress Bar -->
+  <div class="journey-progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Step 1: Select Roles -->
+  <div class="journey-step active" id="step1">
+    <div class="journey-container">
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <h1>What roles are you looking for?</h1>
+        <p>Select all roles that match your career goals. You can select multiple.</p>
+      </div>
+      
+      <div class="roles-grid" id="rolesGrid">
+        <!-- Roles will be populated by JavaScript -->
+      </div>
+      
+      <div class="step-actions">
+        <button class="btn-primary-large" onclick="nextStep()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Select Industries -->
+  <div class="journey-step" id="step2">
+    <div class="journey-container">
+      <div class="step-header">
+        <div class="step-number">2</div>
+        <h1>Which industries interest you?</h1>
+        <p>Choose the industries you want to work in. Select multiple if applicable.</p>
+      </div>
+      
+      <div class="industries-grid" id="industriesGrid">
+        <!-- Industries will be populated by JavaScript -->
+      </div>
+      
+      <div class="step-actions">
+        <button class="btn-secondary-large" onclick="prevStep()">Back</button>
+        <button class="btn-primary-large" onclick="nextStep()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Select Companies -->
+  <div class="journey-step" id="step3">
+    <div class="journey-container">
+      <div class="step-header">
+        <div class="step-number">3</div>
+        <h1>Which companies do you want to apply to?</h1>
+        <p>Filter and select companies based on your preferences.</p>
+      </div>
+      
+      <div class="filters-section">
+        <div class="filter-group">
+          <label>Company Size</label>
+          <div class="filter-buttons">
+            <button class="filter-btn" data-filter="size" data-value="startup">Startup (1-50)</button>
+            <button class="filter-btn" data-filter="size" data-value="sme">SME (51-250)</button>
+            <button class="filter-btn" data-filter="size" data-value="mid">Mid-size (251-1000)</button>
+            <button class="filter-btn" data-filter="size" data-value="large">Large (1000+)</button>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <label>Company Type</label>
+          <div class="filter-buttons">
+            <button class="filter-btn" data-filter="type" data-value="startup">Startup</button>
+            <button class="filter-btn" data-filter="type" data-value="multinational">Multinational</button>
+            <button class="filter-btn" data-filter="type" data-value="public">Publicly Listed</button>
+            <button class="filter-btn" data-filter="type" data-value="private">Private</button>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <label>Location</label>
+          <input type="text" class="filter-input" placeholder="Search locations..." id="locationFilter">
+        </div>
+      </div>
+      
+      <div class="companies-grid" id="companiesGrid">
+        <!-- Companies will be populated by JavaScript -->
+      </div>
+      
+      <div class="step-actions">
+        <button class="btn-secondary-large" onclick="prevStep()">Back</button>
+        <button class="btn-primary-large" onclick="nextStep()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Upload CV -->
+  <div class="journey-step" id="step4">
+    <div class="journey-container">
+      <div class="step-header">
+        <div class="step-number">4</div>
+        <h1>Upload your CV</h1>
+        <p>Upload your base CV. We'll tailor it for each job application.</p>
+      </div>
+      
+      <div class="upload-section">
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📄</div>
+          <h3>Drag & drop your CV here</h3>
+          <p>or click to browse</p>
+          <input type="file" id="cvUpload" accept=".pdf,.doc,.docx" style="display: none;">
+          <button class="btn-primary" onclick="document.getElementById('cvUpload').click()">Choose File</button>
+        </div>
+        
+        <div class="upload-progress" id="uploadProgress" style="display: none;">
+          <div class="progress-ring">
+            <svg class="progress-ring-svg" width="120" height="120">
+              <circle class="progress-ring-circle" cx="60" cy="60" r="54" fill="transparent" stroke="#e5e7eb" stroke-width="8"/>
+              <circle class="progress-ring-progress" cx="60" cy="60" r="54" fill="transparent" stroke="#2563eb" stroke-width="8" stroke-dasharray="339.292" stroke-dashoffset="339.292"/>
+            </svg>
+            <div class="progress-percentage">0%</div>
+          </div>
+          <p>Uploading your CV...</p>
+        </div>
+        
+        <div class="upload-success" id="uploadSuccess" style="display: none;">
+          <div class="success-icon">✓</div>
+          <h3>CV Uploaded Successfully!</h3>
+          <p>Your CV is being processed...</p>
+        </div>
+      </div>
+      
+      <div class="step-actions">
+        <button class="btn-secondary-large" onclick="prevStep()">Back</button>
+        <button class="btn-primary-large" id="continueBtn" onclick="nextStep()" style="display: none;">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Magic Happening -->
+  <div class="journey-step" id="step5">
+    <div class="journey-container">
+      <div class="step-header">
+        <div class="step-number">5</div>
+        <h1>Let the magic happen ✨</h1>
+        <p>We're setting everything up for you...</p>
+      </div>
+      
+      <div class="magic-section">
+        <div class="magic-animation">
+          <div class="sparkle sparkle-1">✨</div>
+          <div class="sparkle sparkle-2">✨</div>
+          <div class="sparkle sparkle-3">✨</div>
+          <div class="magic-circle"></div>
+        </div>
+        
+        <div class="magic-steps">
+          <div class="magic-step active">
+            <div class="magic-step-icon">✓</div>
+            <div class="magic-step-text">Analyzing your CV...</div>
+          </div>
+          <div class="magic-step">
+            <div class="magic-step-icon">⏳</div>
+            <div class="magic-step-text">Extracting skills...</div>
+          </div>
+          <div class="magic-step">
+            <div class="magic-step-icon">⏳</div>
+            <div class="magic-step-text">Setting up job scanning...</div>
+          </div>
+          <div class="magic-step">
+            <div class="magic-step-icon">⏳</div>
+            <div class="magic-step-text">Ready to go!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: Complete -->
+  <div class="journey-step" id="step6">
+    <div class="journey-container">
+      <div class="completion-section">
+        <div class="completion-icon">🎉</div>
+        <h1>You're all set!</h1>
+        <p>ApplyWise will now scan your selected companies daily and notify you when matching roles are found.</p>
+        
+        <div class="completion-features">
+          <div class="completion-feature">
+            <div class="feature-icon">🔍</div>
+            <h3>Daily Scanning</h3>
+            <p>We check career pages every night</p>
+          </div>
+          <div class="completion-feature">
+            <div class="feature-icon">📝</div>
+            <h3>Tailored CVs</h3>
+            <p>ATS-optimized for each role</p>
+          </div>
+          <div class="completion-feature">
+            <div class="feature-icon">✉️</div>
+            <h3>Email Notifications</h3>
+            <p>Get notified when jobs match</p>
+          </div>
+        </div>
+        
+        <button class="btn-primary-large" onclick="completeOnboarding()">Go to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="journey.js"></script>
+</body>
+</html>

@@ -39,7 +39,8 @@ api.interceptors.response.use(
                 }
 
                 // Try to refresh the token
-                const response = await axios.post('http://localhost:3001/api/auth/refresh', {
+                const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+                const response = await axios.post(`${baseURL}/auth/refresh`, {
                     refreshToken,
                 });
 

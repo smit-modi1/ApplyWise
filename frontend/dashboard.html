@@ -2,39 +2,267 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard – ApplyWise</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
   <header class="navbar">
-    <div class="logo">ApplyWise</div>
-    <div class="user-menu">
-      <span>Hi, Smit</span>
-      <button class="btn-secondary">Logout</button>
+    <div class="nav-container">
+      <div class="logo">ApplyWise</div>
+      <div class="user-menu">
+        <span class="user-name">Hi, Admin</span>
+        <button class="btn-secondary" onclick="logout()">Logout</button>
+      </div>
     </div>
   </header>
 
-  <main class="dashboard">
-    <section class="card">
-      <h2>Your Profile</h2>
-      <p><strong>Role focus:</strong> Risk / Operations / Product</p>
-      <p><strong>Experience:</strong> 8+ years</p>
-    </section>
+  <main class="dashboard-main">
+    <!-- Dashboard Tabs -->
+    <div class="dashboard-tabs">
+      <button class="tab-btn active" data-tab="profile" onclick="switchTab('profile')">
+        <span class="tab-icon">👤</span>
+        Your Profile
+      </button>
+      <button class="tab-btn" data-tab="companies" onclick="switchTab('companies')">
+        <span class="tab-icon">🏢</span>
+        Companies
+      </button>
+      <button class="tab-btn" data-tab="roles" onclick="switchTab('roles')">
+        <span class="tab-icon">💼</span>
+        Roles
+      </button>
+      <button class="tab-btn" data-tab="location" onclick="switchTab('location')">
+        <span class="tab-icon">📍</span>
+        Location
+      </button>
+      <button class="tab-btn" data-tab="matches" onclick="switchTab('matches')">
+        <span class="tab-icon">🎯</span>
+        Job Matches
+        <span class="badge">3</span>
+      </button>
+    </div>
 
-    <section class="card">
-      <h2>Upload CV</h2>
-      <input type="file" />
-      <button class="btn-primary">Upload</button>
-    </section>
-
-    <section class="card">
-      <h2>Suggested Roles</h2>
-      <div class="role-grid">
-        <div class="role">Senior Risk Manager</div>
-        <div class="role">Product Operations Lead</div>
-        <div class="role">Business Control Officer</div>
+    <!-- Tab Content -->
+    <div class="dashboard-content">
+      <!-- Profile Tab -->
+      <div class="tab-content active" id="profileTab">
+        <div class="dashboard-header">
+          <h1>Your Profile</h1>
+          <p>Manage your personal information and preferences</p>
+        </div>
+        
+        <div class="profile-grid">
+          <div class="profile-card">
+            <h3>Personal Information</h3>
+            <div class="profile-field">
+              <label>Email</label>
+              <input type="email" value="admin@applywise.co.uk" readonly>
+            </div>
+            <div class="profile-field">
+              <label>Full Name</label>
+              <input type="text" value="Admin User" placeholder="Enter your name">
+            </div>
+            <div class="profile-field">
+              <label>Phone</label>
+              <input type="tel" placeholder="Enter your phone number">
+            </div>
+            <div class="profile-field">
+              <label>LinkedIn Profile</label>
+              <input type="url" placeholder="https://linkedin.com/in/yourprofile">
+            </div>
+            <button class="btn-primary">Save Changes</button>
+          </div>
+          
+          <div class="profile-card">
+            <h3>CV Status</h3>
+            <div class="cv-status">
+              <div class="cv-icon">📄</div>
+              <div class="cv-info">
+                <h4>Your CV</h4>
+                <p>Uploaded on Jan 15, 2024</p>
+                <button class="btn-secondary-small">Replace CV</button>
+              </div>
+            </div>
+            <div class="cv-stats">
+              <div class="stat-item">
+                <div class="stat-value">8+</div>
+                <div class="stat-label">Years Experience</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">15</div>
+                <div class="stat-label">Skills Extracted</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-card">
+            <h3>Notification Settings</h3>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" checked>
+                <span>Email notifications for new job matches</span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox" checked>
+                <span>Daily summary emails</span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label>
+                <input type="checkbox">
+                <span>Weekly analytics report</span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+
+      <!-- Companies Tab -->
+      <div class="tab-content" id="companiesTab">
+        <div class="dashboard-header">
+          <h1>Companies You Want to Apply For</h1>
+          <p>Manage your target companies list</p>
+        </div>
+        
+        <div class="companies-list">
+          <div class="company-item">
+            <div class="company-logo">🏦</div>
+            <div class="company-details">
+              <h3>Goldman Sachs</h3>
+              <p>Banking • New York, USA</p>
+              <span class="company-tag">Large • Public</span>
+            </div>
+            <div class="company-actions">
+              <button class="btn-secondary-small">Remove</button>
+            </div>
+          </div>
+          <!-- More companies will be loaded from localStorage -->
+        </div>
+        
+        <button class="btn-primary" onclick="showAddCompanyModal()">+ Add Company</button>
+      </div>
+
+      <!-- Roles Tab -->
+      <div class="tab-content" id="rolesTab">
+        <div class="dashboard-header">
+          <h1>Roles You're Looking For</h1>
+          <p>Manage your target roles across different sectors</p>
+        </div>
+        
+        <div class="roles-section">
+          <div class="role-category-section">
+            <h3>IT & Tech</h3>
+            <div class="role-chips-container">
+              <!-- Roles will be loaded from localStorage -->
+            </div>
+          </div>
+          <!-- More categories -->
+        </div>
+        
+        <button class="btn-primary" onclick="showAddRoleModal()">+ Add Role</button>
+      </div>
+
+      <!-- Location Tab -->
+      <div class="tab-content" id="locationTab">
+        <div class="dashboard-header">
+          <h1>Preferred Locations</h1>
+          <p>Where would you like to work?</p>
+        </div>
+        
+        <div class="location-section">
+          <div class="location-input-group">
+            <input type="text" id="locationInput" placeholder="Enter city or country">
+            <button class="btn-primary" onclick="addLocation()">Add Location</button>
+          </div>
+          
+          <div class="locations-list" id="locationsList">
+            <div class="location-chip">
+              London, UK
+              <button class="remove-btn" onclick="removeLocation('London, UK')">×</button>
+            </div>
+            <div class="location-chip">
+              New York, USA
+              <button class="remove-btn" onclick="removeLocation('New York, USA')">×</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matches Tab -->
+      <div class="tab-content" id="matchesTab">
+        <div class="dashboard-header">
+          <h1>Job Matches</h1>
+          <p>Ready-to-apply positions with tailored documents</p>
+        </div>
+        
+        <div class="matches-grid" id="matchesGrid">
+          <!-- Sample match card -->
+          <div class="match-card">
+            <div class="match-header">
+              <div class="match-company">
+                <div class="company-logo-small">🏦</div>
+                <div>
+                  <h3>Senior Risk Manager</h3>
+                  <p>Goldman Sachs • New York, USA</p>
+                </div>
+              </div>
+              <div class="match-score">
+                <div class="score-circle">
+                  <svg class="score-svg" width="80" height="80">
+                    <circle cx="40" cy="40" r="36" fill="transparent" stroke="#e5e7eb" stroke-width="6"/>
+                    <circle cx="40" cy="40" r="36" fill="transparent" stroke="#10b981" stroke-width="6" 
+                            stroke-dasharray="226" stroke-dashoffset="45" class="score-progress"/>
+                  </svg>
+                  <div class="score-text">92%</div>
+                </div>
+                <span class="score-label">Match Score</span>
+              </div>
+            </div>
+            
+            <div class="match-details">
+              <div class="match-badges">
+                <span class="badge">Full-time</span>
+                <span class="badge">Remote</span>
+                <span class="badge">$120k-150k</span>
+              </div>
+              
+              <div class="match-documents">
+                <div class="document-item">
+                  <span class="doc-icon">📄</span>
+                  <span>Tailored CV (DOCX)</span>
+                  <button class="btn-link-small">Download</button>
+                </div>
+                <div class="document-item">
+                  <span class="doc-icon">✉️</span>
+                  <span>Cover Letter (DOCX)</span>
+                  <button class="btn-link-small">Download</button>
+                </div>
+                <div class="document-item">
+                  <span class="doc-icon">📋</span>
+                  <span>Job Description</span>
+                  <button class="btn-link-small">View</button>
+                </div>
+              </div>
+              
+              <div class="match-actions">
+                <button class="btn-primary">Apply Now</button>
+                <button class="btn-secondary">View Details</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- More match cards will be added dynamically -->
+        </div>
+      </div>
+    </div>
   </main>
+
+  <script src="dashboard.js"></script>
 </body>
 </html>

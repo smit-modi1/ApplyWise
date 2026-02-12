@@ -16,7 +16,8 @@ export default function LoginPage() {
     });
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:3001/api/auth/google";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        window.location.href = `${apiUrl}/auth/google`;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
