@@ -1,15 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "frontend-v2/package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "frontend-v2/$1"
-    }
-  ]
+  "buildCommand": "cd frontend-v2 && npm install && npm run build",
+  "outputDirectory": "frontend-v2/.next",
+  "installCommand": "cd frontend-v2 && npm install"
 }
