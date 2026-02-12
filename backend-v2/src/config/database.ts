@@ -1,0 +1,16 @@
+import { PrismaClient } from '@prisma/client';
+import { config } from './env';
+
+const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClient | undefined;
+};
+
+export const prisma =
+    globalForPrisma.prisma ??
+    new PrismaClient({
+        log: config.server.isDevelopment ? ['query', 'error', 'warn'] : ['error'],
+    });
+
+if (config.server.isDevelopment) globalForPrisma.prisma = prisma;
+
+export default prisma;

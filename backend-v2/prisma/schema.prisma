@@ -1,0 +1,265 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String?   @map("password_hash")
+  googleId      String?   @unique @map("google_id")
+  firstName     String?   @map("first_name")
+  lastName      String?   @map("last_name")
+  phone         String?
+  linkedinUrl   String?   @map("linkedin_url")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  lastLogin     DateTime? @map("last_login")
+  isActive      Boolean   @default(true) @map("is_active")
+  emailVerified Boolean   @default(false) @map("email_verified")
+
+  resumes            Resume[]
+  preferences        UserPreferences?
+  userCompanies      UserCompany[]
+  jobMatches         JobMatch[]
+  tailoredResumes    TailoredResume[]
+  coverLetters       CoverLetter[]
+  applicationTracking ApplicationTracking[]
+  emailLogs          EmailLog[]
+  companiesAdded     Company[]
+
+  @@map("users")
+}
+
+model Resume {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  fileName   String   @map("file_name")
+  filePath   String   @map("file_path")
+  fileType   String   @map("file_type")
+  fileSize   Int      @map("file_size")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  isPrimary  Boolean  @default(false) @map("is_primary")
+  parsedData Json?    @map("parsed_data")
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tailoredResumes TailoredResume[]
+
+  @@map("resumes")
+}
+
+model UserPreferences {
+  id                      String   @id @default(uuid())
+  userId                  String   @unique @map("user_id")
+  targetRoles             Json     @map("target_roles")
+  targetIndustries        Json     @map("target_industries")
+  preferredLocations      Json     @map("preferred_locations")
+  jobTypes                Json     @map("job_types")
+  salaryMin               Int?     @map("salary_min")
+  salaryMax               Int?     @map("salary_max")
+  companySizePreference   String?  @map("company_size_preference")
+  companyTypePreference   String?  @map("company_type_preference")
+  notificationEmail       Boolean  @default(true) @map("notification_email")
+  notificationFrequency   String   @default("Daily") @map("notification_frequency")
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Company {
+  id                   String    @id @default(uuid())
+  name                 String
+  industry             String?
+  size                 String?
+  type                 String?
+  headquartersLocation String?   @map("headquarters_location")
+  websiteUrl           String?   @map("website_url")
+  careersPageUrl       String?   @map("careers_page_url")
+  linkedinUrl          String?   @map("linkedin_url")
+  logoUrl              String?   @map("logo_url")
+  description          String?   @db.Text
+  isActive             Boolean   @default(true) @map("is_active")
+  addedByUserId        String?   @map("added_by_user_id")
+  country              String?
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  lastScrapedAt        DateTime? @map("last_scraped_at")
+
+  addedBy       User?          @relation(fields: [addedByUserId], references: [id])
+  userCompanies UserCompany[]
+  jobs          Job[]
+  scrapingLogs  ScrapingLog[]
+
+  @@map("companies")
+}
+
+model UserCompany {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  companyId String   @map("company_id")
+  addedAt   DateTime @default(now()) @map("added_at")
+  isActive  Boolean  @default(true) @map("is_active")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+  @@map("user_companies")
+}
+
+model Job {
+  id                   String    @id @default(uuid())
+  companyId            String    @map("company_id")
+  title                String
+  description          String?   @db.Text
+  requirements         String?   @db.Text
+  responsibilities     String?   @db.Text
+  location             String?
+  jobType              String?   @map("job_type")
+  salaryMin            Int?      @map("salary_min")
+  salaryMax            Int?      @map("salary_max")
+  salaryCurrency       String?   @map("salary_currency")
+  experienceLevel      String?   @map("experience_level")
+  postedDate           DateTime? @map("posted_date")
+  applicationDeadline  DateTime? @map("application_deadline")
+  sourceUrl            String    @unique @map("source_url")
+  sourceType           String    @map("source_type")
+  rawHtml              String?   @db.Text @map("raw_html")
+  isActive             Boolean   @default(true) @map("is_active")
+  discoveredAt         DateTime  @default(now()) @map("discovered_at")
+  lastCheckedAt        DateTime  @default(now()) @map("last_checked_at")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  company         Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  jobMatches      JobMatch[]
+  tailoredResumes TailoredResume[]
+  coverLetters    CoverLetter[]
+
+  @@map("jobs")
+}
+
+model JobMatch {
+  id                 String    @id @default(uuid())
+  userId             String    @map("user_id")
+  jobId              String    @map("job_id")
+  matchScore         Decimal   @map("match_score") @db.Decimal(5, 2)
+  matchReasons       Json      @map("match_reasons")
+  status             String    @default("new")
+  tailoredResumeId   String?   @map("tailored_resume_id")
+  coverLetterId      String?   @map("cover_letter_id")
+  notifiedAt         DateTime? @map("notified_at")
+  viewedAt           DateTime? @map("viewed_at")
+  appliedAt          DateTime? @map("applied_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job                 Job                   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  tailoredResume      TailoredResume?       @relation(fields: [tailoredResumeId], references: [id])
+  coverLetter         CoverLetter?          @relation(fields: [coverLetterId], references: [id])
+  applicationTracking ApplicationTracking[]
+
+  @@unique([userId, jobId])
+  @@map("job_matches")
+}
+
+model TailoredResume {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  jobId            String   @map("job_id")
+  originalResumeId String   @map("original_resume_id")
+  filePathDocx     String?  @map("file_path_docx")
+  filePathPdf      String?  @map("file_path_pdf")
+  tailoredContent  Json     @map("tailored_content")
+  atsScore         Decimal? @map("ats_score") @db.Decimal(5, 2)
+  modifications    Json?
+  generatedAt      DateTime @default(now()) @map("generated_at")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job            Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  originalResume Resume     @relation(fields: [originalResumeId], references: [id])
+  jobMatches     JobMatch[]
+
+  @@map("tailored_resumes")
+}
+
+model CoverLetter {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  jobId        String   @map("job_id")
+  filePathDocx String?  @map("file_path_docx")
+  filePathPdf  String?  @map("file_path_pdf")
+  content      String   @db.Text
+  generatedAt  DateTime @default(now()) @map("generated_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job        Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobMatches JobMatch[]
+
+  @@map("cover_letters")
+}
+
+model ApplicationTracking {
+  id             String    @id @default(uuid())
+  userId         String    @map("user_id")
+  jobMatchId     String    @map("job_match_id")
+  status         String
+  appliedDate    DateTime? @map("applied_date")
+  interviewDates Json?     @map("interview_dates")
+  notes          String?   @db.Text
+  followUpDate   DateTime? @map("follow_up_date")
+  outcome        String?
+  outcomeDate    DateTime? @map("outcome_date")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobMatch JobMatch @relation(fields: [jobMatchId], references: [id], onDelete: Cascade)
+
+  @@map("application_tracking")
+}
+
+model EmailLog {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  emailType    String   @map("email_type")
+  subject      String
+  sentTo       String   @map("sent_to")
+  sentAt       DateTime @default(now()) @map("sent_at")
+  status       String
+  errorMessage String?  @db.Text @map("error_message")
+  metadata     Json?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_logs")
+}
+
+model ScrapingLog {
+  id          String    @id @default(uuid())
+  companyId   String    @map("company_id")
+  scrapeType  String    @map("scrape_type")
+  startedAt   DateTime  @default(now()) @map("started_at")
+  completedAt DateTime? @map("completed_at")
+  status      String
+  jobsFound   Int       @default(0) @map("jobs_found")
+  jobsNew     Int       @default(0) @map("jobs_new")
+  errorMessage String?  @db.Text @map("error_message")
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("scraping_logs")
+}

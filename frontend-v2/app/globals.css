@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    /* #111111 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 0 0% 7%;
+    /* #111111 */
+    --primary-foreground: 0 0% 100%;
+    /* #FFFFFF */
+    --secondary: 0 0% 96%;
+    /* #F5F5F5 */
+    --secondary-foreground: 0 0% 7%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 7%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 92%;
+    /* #EAEAEA */
+    --input: 0 0% 92%;
+    --ring: 0 0% 7%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-white text-gray-900 antialiased font-sans;
+  }
+}
+
+/* Premium Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Premium Components */
+.premium-card {
+  @apply bg-white border border-gray-100 rounded-2xl shadow-sm transition-all duration-300;
+}
+
+.premium-card:hover {
+  @apply shadow-md -translate-y-[4px];
+}
+
+.premium-button-primary {
+  @apply bg-black text-white rounded-lg px-6 py-3 font-medium transition-all duration-300 hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] shadow-sm;
+}
+
+.premium-button-secondary {
+  @apply bg-white text-black border border-gray-200 rounded-lg px-6 py-3 font-medium transition-all duration-300 hover:bg-gray-50 hover:border-gray-300 hover:scale-[1.02] active:scale-[0.98];
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #EAEAEA;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #CCCCCC;
+}
