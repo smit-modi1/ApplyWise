@@ -34,6 +34,7 @@ model User {
   applicationTracking ApplicationTracking[]
   emailLogs          EmailLog[]
   companiesAdded     Company[]
+  articles           Article[]
 
   @@map("users")
 }
@@ -262,4 +263,19 @@ model ScrapingLog {
   company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@map("scraping_logs")
+}
+
+model Article {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text
+  published   Boolean  @default(false)
+  authorId    String   @map("author_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  author      User     @relation(fields: [authorId], references: [id])
+
+  @@map("articles")
 }

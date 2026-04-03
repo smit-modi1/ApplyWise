@@ -74,6 +74,9 @@ app.use('/api/resumes', resumesRouter);
 import aiRouter from './modules/ai/ai.routes';
 app.use('/api/ai', aiRouter);
 
+import articlesRouter from './modules/articles/articles.routes';
+app.use('/api/articles', articlesRouter);
+
 // TODO: Import and use other routers
 // app.use('/api/users', usersRouter);
 // app.use('/api/companies', companiesRouter);
