@@ -30,8 +30,8 @@ const envSchema = z.object({
     EMAIL_FROM: z.string(),
 
     // File Storage
-    UPLOAD_DIR: z.string().default('./uploads'),
-    GENERATED_DIR: z.string().default('./generated'),
+    UPLOAD_DIR: z.string().default(process.env.VERCEL ? '/tmp/uploads' : './uploads'),
+    GENERATED_DIR: z.string().default(process.env.VERCEL ? '/tmp/generated' : './generated'),
     MAX_FILE_SIZE: z.coerce.number().default(10485760),
 
     // Frontend URL

@@ -8,43 +8,27 @@ Before deploying to Vercel, you MUST deploy your backend. Otherwise, the fronten
 
 ## 📋 Step-by-Step Deployment
 
-### Step 1: Deploy Backend (Choose One)
+### Step 1: Deploy Backend to Vercel
 
-#### Option A: Railway (Recommended - Easy & Free)
-1. Go to https://railway.app
-2. Sign in with GitHub
-3. Click "New Project" → "Deploy from GitHub repo"
-4. Select `ApplyWise` repository
-5. Click "Add variables" and add these:
+1. Go to https://vercel.com/dashboard
+2. Click "Add New..." → "Project"
+3. Import your `ApplyWise` repository
+4. **Important**: Under "Project Settings", select `backend-v2` as the **Root Directory**!
+5. Open "Environment Variables" and add these:
    ```
-   DATABASE_URL=your_mysql_url
+   DATABASE_URL=your_database_url
    JWT_SECRET=your-super-secret-jwt-key-minimum-32-characters-long
    REFRESH_TOKEN_SECRET=your-refresh-secret-minimum-32-characters-long
    GOOGLE_CLIENT_ID=your-google-client-id-from-google-cloud-console
    GOOGLE_CLIENT_SECRET=your-google-client-secret-from-google-cloud-console
    GEMINI_API_KEY=your-gemini-api-key-from-google-ai-studio
-   FRONTEND_URL=https://your-app-name.vercel.app
+   FRONTEND_URL=https://your-frontend-app-name.vercel.app
    NODE_ENV=production
-   PORT=3001
    ```
-6. In Settings → Set:
-   - Root Directory: `backend-v2`
-   - Start Command: `npm start`
-7. Click "Deploy"
-8. **Copy your Railway URL** (e.g., `https://applywise-backend.up.railway.app`)
+6. Click "Deploy"
+7. **Copy your Backend Vercel URL** (e.g., `https://applywise-backend.vercel.app`)
 
-#### Option B: Render
-1. Go to https://render.com
-2. New → Web Service
-3. Connect GitHub → Select ApplyWise
-4. Configure:
-   - Name: `applywise-backend`
-   - Root Directory: `backend-v2`
-   - Build Command: `npm install`
-   - Start Command: `npm start`
-5. Add environment variables (same as above)
-6. Create Web Service
-7. **Copy your Render URL**
+*Note: The `backend-v2` is now configured for Vercel Serverless Functions using the custom `api/index.ts` handler and local `vercel.json`.*
 
 ---
 
@@ -55,11 +39,11 @@ Before deploying to Vercel, you MUST deploy your backend. Otherwise, the fronten
 3. Click your OAuth 2.0 Client ID
 4. Add to "Authorized JavaScript origins":
    ```
-   https://your-backend-url.railway.app
+   https://your-backend-app-name.vercel.app
    ```
 5. Add to "Authorized redirect URIs":
    ```
-   https://your-backend-url.railway.app/api/auth/google/callback
+   https://your-backend-app-name.vercel.app/api/auth/google/callback
    ```
 6. Save
 
@@ -80,7 +64,7 @@ Before deploying to Vercel, you MUST deploy your backend. Otherwise, the fronten
 6. Add this variable:
    ```
    Name: NEXT_PUBLIC_API_URL
-   Value: https://your-backend-url.railway.app/api
+   Value: https://your-backend-app-name.vercel.app/api
    ```
    ⚠️ Replace with YOUR actual backend URL from Step 1!
 
@@ -103,14 +87,14 @@ Before deploying to Vercel, you MUST deploy your backend. Otherwise, the fronten
 
 ### Step 5: Update Backend FRONTEND_URL
 
-1. Go back to Railway/Render dashboard
-2. Find your backend service
-3. Go to Variables/Environment Variables
-4. Update `FRONTEND_URL` to your Vercel URL:
+1. Go back to your Backend Vercel dashboard
+2. Find your backend project
+3. Go to Settings → Environment Variables
+4. Update `FRONTEND_URL` to your Frontend Vercel URL:
    ```
-   FRONTEND_URL=https://your-app-name.vercel.app
+   FRONTEND_URL=https://your-frontend-app-name.vercel.app
    ```
-5. Redeploy backend
+5. Redeploy backend if necessary
 
 ---
 
@@ -174,7 +158,7 @@ Before deploying to Vercel, you MUST deploy your backend. Otherwise, the fronten
 ## 📝 Quick Reference
 
 ### Your URLs (Fill these in):
-- **Backend URL:** `https://_____________________.railway.app`
+- **Backend URL:** `https://_____________________.vercel.app`
 - **Frontend URL:** `https://_____________________.vercel.app`
 
 ### Environment Variables:
@@ -184,7 +168,7 @@ Before deploying to Vercel, you MUST deploy your backend. Otherwise, the fronten
 NEXT_PUBLIC_API_URL=https://YOUR-BACKEND-URL/api
 ```
 
-**Railway/Render (Backend):**
+**Vercel (Backend):**
 ```
 FRONTEND_URL=https://YOUR-VERCEL-URL
 GOOGLE_CALLBACK_URL=https://YOUR-BACKEND-URL/api/auth/google/callback
@@ -195,7 +179,7 @@ GOOGLE_CALLBACK_URL=https://YOUR-BACKEND-URL/api/auth/google/callback
 ## ✅ Deployment Complete!
 
 Once everything is set up:
-- ✅ Backend running on Railway/Render
+- ✅ Backend running on Vercel
 - ✅ Frontend running on Vercel
 - ✅ Google OAuth configured
 - ✅ Environment variables set
