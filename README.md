@@ -65,6 +65,12 @@ See `docs/setup-guide.md` for detailed setup instructions.
 - Week 3: Scheduler, Email notifications, Document generation
 - Week 4: UI polish, UX improvements, Demo-ready MVP
 
+## Future Requests
+- List of companies sponsoring in UK will be on portal
+- Sponsorship score will be there on portal
+- Recommendation engine: what roles you should apply for will be there
+- Link to career page of company
+
 ## License
 
 MIT License - see LICENSE file for details.
